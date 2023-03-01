@@ -1,0 +1,163 @@
+<div class="carousel">
+  <div class="container">
+    <a href="">
+      <img src="images/1.jpg" alt="" />
+    </a>
+    <a href="">
+      <img src="images/2.jpg" alt="" />
+    </a>
+    <a href="">
+      <img src="images/3.jpg" alt="" />
+    </a>
+  </div>
+  <div class="shift">
+    <div class="btn left" onclick="leftShift()">&lt;</div>
+    <div class="btn right" onclick="rightShift()">&gt;</div>
+  </div>
+  <div class="bottom">
+    <div class="indicator" onclick="setIndex(0)">1</div>
+    <div class="indicator" onclick="setIndex(1)">2</div>
+    <div class="indicator" onclick="setIndex(2)">3</div>
+  </div>
+</div>
+
+<style>
+  .carousel {
+    margin: auto; /* 居中 */
+    width: 600px; /* 设置宽度 */
+    height: 300px; /* 设置高度 */
+    position: relative; /* 相对定位 */
+    overflow: hidden; /* 超出隐藏 */
+  }
+
+  .carousel .container {
+    height: 100%; /* 轮播框高度 */
+    width: 100%; /* 轮播框宽度 */
+    position: relative; /* 相对定位 */
+    left: 0;
+    display: flex;
+    transition: all 1s; /* 过渡动画 1s */
+  }
+
+  .carousel .container a img {
+    width: 600px; /* 设定大小 按比例缩放 */
+  }
+
+  .carousel .shift .btn {
+    position: absolute; /* 绝对定位且垂直居中 */
+    top: 0;
+    bottom: 0;
+    margin: auto 0; /* 居中 */
+
+    background-color: teal;
+    color: white;
+
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+
+    /* 字符水平垂直居中 */
+    line-height: 50px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    opacity: 0.5; /* 不透明度 0.5 */
+  }
+  .carousel .shift .left {
+    left: 20px;
+  }
+  .carousel .shift .right {
+    right: 20px;
+  }
+  .carousel .bottom {
+    position: absolute;
+    bottom: 20px;
+    /* 绝对定位水平居中 */
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    /* 宽度等同于内容宽度 */
+    width: max-content;
+    display: flex;
+    /* 指示器间距 */
+    gap: 10px;
+  }
+
+  .carousel .bottom .indicator {
+    height: 30px;
+    width: 30px;
+    border-radius: 0%;
+    background-color: teal;
+    opacity: 0.5;
+    cursor: pointer;
+  }
+
+  .carousel:hover .bottom .indicator {
+    opacity: 1;
+  }
+  .carousel:hover .shift .btn {
+    opacity: 1;
+  }
+  .carousel .shift .left {
+    left: 20px;
+  }
+  .carousel .shift .right {
+    right: 20px;
+  }
+</style>
+
+<script>
+  let index = 1 // 显示的图片下标
+  let imageCount = document.querySelectorAll('.carousel .container a img').length - 1 // 图片的下标
+  console.log(imageCount)
+  const bottom = document.querySelector('.carousel .bottom')
+
+  function createAuto() {
+    return setInterval(() => {
+      refresh()
+      index++
+    }, 3000)
+  }
+
+  let autoTimer = createAuto() // 自动滚动
+
+  function refresh() {
+    if (index < 0) {
+      index = imageCount // 下标小于0时,设置最右的图片
+    } else if (index > imageCount) {
+      index = 0 // 下标超过上限时,设置最左的图片
+    }
+    let carousel = document.querySelector('.carousel') // 获取轮播框元素
+    let width = getComputedStyle(carousel).width // 获取轮播框的宽度
+    width = Number(width.slice(0, -2))
+    carousel.querySelector('.container').style.left = index * width * -1 + 'px'
+  }
+
+  let refreshWrapper = func => {
+    // refresh 装饰器
+    return function (...args) {
+      let result = func(...args)
+      refresh()
+    }
+  }
+
+  let setIndex = refreshWrapper(idx => {
+    index = idx
+  })
+  let leftShift = refreshWrapper(() => {
+    index--
+  })
+  let rightShift = refreshWrapper(() => {
+    index++
+  })
+
+  let div = document.querySelector('div')
+  //   鼠标移入：停止定时器
+  div.addEventListener('mouseenter', function () {
+    clearInterval(autoTimer)
+  })
+  //   鼠标移出：重启定时器
+  div.addEventListener('mouseleave', function () {
+    createAuto()
+  })
+</script>
