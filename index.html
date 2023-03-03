@@ -116,7 +116,7 @@
     return setInterval(() => {
       refresh()
       index++
-    }, 3000)
+    }, 1000)
   }
 
   let autoTimer = createAuto() // 自动滚动
@@ -157,7 +157,7 @@
     clearInterval(autoTimer)
   })
   //   鼠标移出：重启定时器
-  div.addEventListener('mouseleave', function () {
-    autoTimer
+  div.addEventListener('mouseout', function () {
+    createAuto()
   })
 </script>
