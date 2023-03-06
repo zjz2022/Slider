@@ -107,19 +107,9 @@
 </style>
 
 <script>
-  let index = 1 // 显示的图片下标
+  let index = 0 // 显示的图片下标
   let imageCount = document.querySelectorAll('.carousel .container a img').length - 1 // 图片的下标
-  console.log(imageCount)
   const bottom = document.querySelector('.carousel .bottom')
-
-  function createAuto() {
-    return setInterval(() => {
-      refresh()
-      index++
-    }, 1000)
-  }
-
-  let autoTimer = createAuto() // 自动滚动
 
   function refresh() {
     if (index < 0) {
@@ -149,15 +139,5 @@
   })
   let rightShift = refreshWrapper(() => {
     index++
-  })
-
-  let div = document.querySelector('div')
-  //   鼠标移入：停止定时器
-  div.addEventListener('mouseenter', function () {
-    clearInterval(autoTimer)
-  })
-  //   鼠标移出：重启定时器
-  div.addEventListener('mouseout', function () {
-    createAuto()
   })
 </script>
